@@ -61,9 +61,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new AccountLockedException(MessageConstant.ACCOUNT_LOCKED);
         }
 
-
-
-
         //3、返回实体对象
         return employee;
     }
@@ -109,8 +106,23 @@ public class EmployeeServiceImpl implements EmployeeService {
                         .build();
 
        employeeMapper.Update(employee);
+    }
 
+    @Override
+    public Employee getById(Integer id) {
+        Employee employee = employeeMapper.idQuery(id);
+        return employee;
+    }
 
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+
+        employeeMapper.Update(employee);
     }
 
 }
